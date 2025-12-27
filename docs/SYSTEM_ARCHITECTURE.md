@@ -385,40 +385,41 @@ graph TB
     
     subgraph PRODUCERS["Event Producers"]
         VIDEO[Video Source]:::implemented
-        OD[Object Detection]:::implemented
-        TR[Tracker]:::implemented
-        SA[Spatial Analysis]:::implemented
-        SLAM[SLAM]:::indev
-        LOC[Localization]:::indev
-        PP[Path Planner]:::indev
-        OA[Obstacle Avoidance]:::indev
+        OD_PROD[Object Detection]:::implemented
+        TR_PROD[Tracker]:::implemented
+        SA_PROD[Spatial Analysis]:::implemented
+        SLAM_PROD[SLAM]:::indev
+        LOC_PROD[Localization]:::indev
+        PP_PROD[Path Planner]:::indev
+        OA_PROD[Obstacle Avoidance]:::indev
     end
     
     subgraph CONSUMERS["Event Consumers"]
-        OD_C[Object Detection]:::implemented
-        TR_C[Tracker]:::implemented
-        SA_C[Spatial Analysis]:::implemented
+        OD_CONS[Object Detection]:::implemented
+        TR_CONS[Tracker]:::implemented
+        SA_CONS[Spatial Analysis]:::implemented
         FUS[Fusion Policy]:::implemented
-        OA_C[Obstacle Avoidance]:::indev
+        OA_CONS[Obstacle Avoidance]:::indev
+        SLAM_CONS[SLAM]:::indev
         VOICE[Voice Output]:::implemented
     end
     
     VIDEO -->|FramePacket| FB
-    FB -.->|subscribe| OD_C
-    FB -.->|subscribe (optional)| SLAM
+    FB -.->|subscribe| OD_CONS
+    FB -.->|subscribe| SLAM_CONS
     
-    OD -->|DetectionResult| RB
-    TR -->|TrackUpdate| RB
-    SA -->|SpatialGuidance| RB
-    SLAM -.->|UserPose| RB
-    LOC -.->|LocalizedPosition| RB
-    PP -.->|PlannedPath| RB
-    OA -.->|NavigationInstruction| RB
+    OD_PROD -->|DetectionResult| RB
+    TR_PROD -->|TrackUpdate| RB
+    SA_PROD -->|SpatialGuidance| RB
+    SLAM_PROD -.->|UserPose| RB
+    LOC_PROD -.->|LocalizedPosition| RB
+    PP_PROD -.->|PlannedPath| RB
+    OA_PROD -.->|NavigationInstruction| RB
     
-    RB -.->|subscribe| TR_C
-    RB -.->|subscribe| SA_C
+    RB -.->|subscribe| TR_CONS
+    RB -.->|subscribe| SA_CONS
     RB -.->|subscribe| FUS
-    RB -.->|subscribe| OA_C
+    RB -.->|subscribe| OA_CONS
     RB -.->|subscribe| VOICE
     
     classDef implemented fill:#81c784,stroke:#4caf50,stroke-width:3px
@@ -426,10 +427,11 @@ graph TB
 ```
 
 **Key Points:**
-- **FrameBus**: Only Object Detection (and optionally SLAM) processes raw video frames
-- **ResultBus**: All other modules publish/subscribe to typed events
+- **FrameBus**: Only Object Detection and SLAM subscribe to raw video frames
+- **ResultBus**: All modules publish/subscribe to typed events
 - **Decoupling**: Modules don't know about each other, only about event types
 - **Parallel Work**: Teams can develop independently as long as contracts are honored
+- **Note**: Modules can be both producers AND consumers (e.g., Object Detection consumes FramePacket, produces DetectionResult)
 
 ---
 
