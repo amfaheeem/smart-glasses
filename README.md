@@ -31,40 +31,62 @@ That's it! You should see:
 
 ---
 
-## 🎯 Features
+## 🎯 Core Capabilities
 
-- **🎥 Replay Mode**: Process MP4 files or frame directories (no hardware required)
-- **🔍 Object Detection**: Stub detector for demo (easily replaced with YOLO/etc)
-- **🎯 Multi-Object Tracking**: Persistent track IDs with IoU matching
-- **🧭 Navigation Module**: Direction, distance, movement, and urgency analysis
-- **🔊 Fusion Policy**: Smart announcement prioritization with cooldown
-- **🌐 Web UI**: Real-time visualization with overlays and controls
-- **🧪 Fully Tested**: Comprehensive test suite for all modules
+The system provides **two co-equal capabilities** for comprehensive navigation:
+
+### 1. 🔍 Perception Pipeline (✅ Implemented)
+**What's around me? Immediate obstacle awareness.**
+- Real-time object detection (80+ object types via YOLO)
+- Multi-object tracking with persistent IDs
+- Spatial analysis (direction, distance, movement, urgency)
+- Voice commands and scene descriptions
+
+### 2. 🗺️ Navigation Pipeline (🔵 In Development)
+**Where am I going? Destination guidance.**
+- SLAM and localization (position on indoor map)
+- Path planning (route calculation)
+- Obstacle avoidance (dynamic replanning)
+- Turn-by-turn voice guidance
+
+### 3. 🔀 Unified Guidance
+Both pipelines feed into fusion layer for prioritized voice output:
+- Urgent obstacles override routine directions
+- Smart announcement prioritization
+- Natural language text-to-speech
 
 ---
 
 ## 📐 Architecture
 
-Four first-class modules connected via asyncio pub-sub buses:
+**Dual-pipeline design with clear team responsibilities:**
 
 ```
-Video → FrameBus → ObjectDetection → ResultBus
-                         ↓
-                    Tracker → ResultBus
-                         ↓
-                    Navigation → ResultBus  
-                         ↓
-                    Fusion → Announcements → UI
+┌─────────────────────────────────────────┐
+│          👤 USER (Blind Person)         │
+└────────────┬──────────────▲─────────────┘
+             │              │
+         Voice In      Voice Out
+             │              │
+    ┌────────▼──────────────┴────────┐
+    │    🔀 FUSION & GUIDANCE        │
+    └────┬───────────────────┬───────┘
+         │                   │
+    ┌────▼─────┐      ┌─────▼──────┐
+    │🔍 PERCEP │      │🗺️ NAVIGAT │
+    │  TION    │      │   ION      │
+    │Pipeline  │      │Pipeline    │
+    │          │      │            │
+    │✅ Active │      │🔵 In Dev   │
+    └──────────┘      └────────────┘
 ```
 
-### Module Responsibilities
+### Implementation Status Legend
+- ✅ **Fully Implemented** - Production-ready, tested
+- 🔵 **In Development** - Navigation team (parallel work)
+- ⚪ **Planned** - Future features (RFID, etc.)
 
-| Module | Input | Output | Purpose |
-|--------|-------|--------|---------|
-| **ObjectDetection** | FramePacket | DetectionResult | Find objects in frames |
-| **Tracker** | DetectionResult | TrackUpdate | Assign persistent IDs |
-| **Navigation** | TrackUpdate | NavigationGuidance | Spatial reasoning |
-| **Fusion** | NavigationGuidance | FusionAnnouncement | Prioritize & announce |
+**See [docs/SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) for complete dual-pipeline architecture with team responsibilities.**
 
 ---
 
