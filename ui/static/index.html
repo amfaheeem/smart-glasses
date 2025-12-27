@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Glasses Navigation Demo</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🕶️ Smart Glasses Navigation Demo</h1>
+            <div class="status" id="status">
+                <span class="status-indicator" id="status-indicator"></span>
+                <span id="status-text">Connecting...</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="video-panel">
+                <div class="canvas-container">
+                    <canvas id="canvas" width="640" height="480"></canvas>
+                    <div class="frame-info" id="frame-info">Frame: 0 / 0</div>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <button id="btn-play" class="btn btn-primary">▶ Play</button>
+                        <button id="btn-pause" class="btn">⏸ Pause</button>
+                        
+                        <label for="speed-select">Speed:</label>
+                        <select id="speed-select" class="select">
+                            <option value="0.5">0.5x</option>
+                            <option value="1.0" selected>1.0x</option>
+                            <option value="2.0">2.0x</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="thresholds">
+                    <h3>Thresholds</h3>
+                    
+                    <div class="threshold-item">
+                        <label for="detection-conf">Detection Confidence:</label>
+                        <input type="range" id="detection-conf" min="0" max="100" value="50" step="5">
+                        <span id="detection-conf-value">0.50</span>
+                    </div>
+
+                    <div class="threshold-item">
+                        <label for="tracker-iou">Tracker IoU:</label>
+                        <input type="range" id="tracker-iou" min="0" max="100" value="30" step="5">
+                        <span id="tracker-iou-value">0.30</span>
+                    </div>
+
+                    <div class="threshold-item">
+                        <label for="fusion-cooldown">Fusion Cooldown (s):</label>
+                        <input type="range" id="fusion-cooldown" min="0" max="100" value="30" step="5">
+                        <span id="fusion-cooldown-value">3.0s</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-panel">
+                <h3>Event Feed</h3>
+                <div class="event-feed" id="event-feed">
+                    <div class="event-item status-item">Waiting for events...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
+

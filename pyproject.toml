@@ -1,0 +1,36 @@
+[project]
+name = "smart-glasses"
+version = "0.1.0"
+description = "Smart Glasses for Blind Navigation - Demo Pipeline"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "opencv-python>=4.5.0",
+    "pydantic>=2.0.0",
+    "python-multipart>=0.0.6",
+    "websockets>=11.0",
+    "numpy>=1.20.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[project.scripts]
+smart-glasses-replay = "apps.run_replay:main"
+smart-glasses-generate = "apps.generate_sample:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["contracts", "platform", "sources", "modules", "modules.object_detection", "modules.tracker", "modules.navigation", "modules.fusion", "ui", "apps", "tests"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
