@@ -169,16 +169,19 @@ graph TB
         end
         
         subgraph SPATIAL["Spatial Analysis"]
-            SA[Spatial Analyzer<br/>- Direction (left/center/right)<br/>- Zone (near/mid/far)<br/>- Movement (approaching/receding)<br/>- Urgency (low/medium/high/critical)]:::implemented
+            SA[Spatial Analyzer<br/>- Direction left/center/right<br/>- Zone near/mid/far<br/>- Movement approaching/receding<br/>- Urgency low/medium/high/critical]:::implemented
         end
         
         FB -->|FramePacket| OD
         OD -->|DetectionResult| TR
         TR -->|TrackUpdate| SA
-        SA -->|SpatialGuidance| FUSION[To Fusion Layer]
+        SA -->|SpatialGuidance| RB[ResultBus]:::implemented
     end
     
+    RB -.->|to Fusion Layer| FUSION_LAYER[ ]
+    
     classDef implemented fill:#81c784,stroke:#4caf50,stroke-width:3px
+    style FUSION_LAYER fill:none,stroke:none
 ```
 
 **Key Responsibilities:**
@@ -222,13 +225,16 @@ graph TB
         LOC_MOD --> PLANNER
         PLANNER --> OA
         OA --> NG
-        NG --> FUSION[To Fusion Layer]
+        NG -.->|NavigationInstruction| RB[ResultBus]:::implemented
         
-        PERC_INPUT[From Perception:<br/>TrackUpdate]:::implemented -.->|Detected obstacles| OA
+        PERC_INPUT[From Perception Pipeline:<br/>TrackUpdate via ResultBus]:::implemented -.->|Detected obstacles| OA
     end
+    
+    RB -.->|to Fusion Layer| FUSION_LAYER[ ]
     
     classDef implemented fill:#81c784,stroke:#4caf50,stroke-width:3px
     classDef indev fill:#64b5f6,stroke:#2196f3,stroke-width:3px
+    style FUSION_LAYER fill:none,stroke:none
 ```
 
 **Key Responsibilities:**
